@@ -1,20 +1,37 @@
 package com.example.mke_todo
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import android.widget.Button
+import android.widget.EditText
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
+    private val noteViewModel: NoteViewModel by viewModels()
+    private lateinit var noteAdapter: NoteAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        val recyclerViewNotes = findViewById<RecyclerView>(R.id.recyclerViewNotes)
+        val editTextNote = findViewById<EditText>(R.id.editTextNote)
+        val buttonAdd = findViewById<Button>(R.id.buttonAdd)
+
+        noteAdapter = NoteAdapter(emptyList())
+        recyclerViewNotes.layoutManager = LinearLayoutManager(this)
+        recyclerViewNotes.adapter = noteAdapter
+
+        buttonAdd.setOnClickListener {
+            val noteText = editTextNote.text.toString()
+            noteViewModel.addNote(noteText)
+            editTextNote.text.clear()
+        }
+
+        noteViewModel.notes.observe(this) { notes ->
+            noteAdapter.updateNotes(notes)
         }
     }
 }
