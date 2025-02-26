@@ -14,4 +14,5 @@ class NoteViewModel : ViewModel() {
             _notes.value = currentList + Note(noteText)
         }
     }
+
 }
