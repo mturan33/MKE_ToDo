@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.mke_todo"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.mke_todo"
